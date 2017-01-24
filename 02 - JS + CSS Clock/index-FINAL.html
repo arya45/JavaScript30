@@ -63,19 +63,41 @@
       top:50%;
       transform-origin: 100%; /* default is 50% along x-axis, i.e. center of div */
       transform: rotate(90deg); /* initialising at 12 o'clock */
-      transition: transform 0.1s cubic-bezier(0, 0, 0.44, 1.8);
+      transition: transform 0.05s cubic-bezier(0, 0, 0.44, 1.8);
     }
 
     .hour-hand {
       background-color: #158769;
     }
+    .min-hand {
+      background-color: #A58874;
+    }
+    .second-hand {
+      background-color: #DE5789;
+    }
+    .no-transition {
+      transition: none;
+    }
 
   </style>
 
   <script>
-    var d = new Date(), initHour = d.getHours(), initMinut = d.getMinutes(), initSeconds= d.getSeconds();
+    //let i=1; 
+    var secondHandDiv = document.querySelector(".second-hand"),
+    minHandDiv = document.querySelector(".min-hand"),
+    hourHandDiv = document.querySelector(".hour-hand");
 
-    document.getElementsByClassName("hour-hand")[0].style.transform="rotate("+(90+initHour*30)+"deg)"; /* parenthesis around numbers to avoid their concatenation! */
+    setInterval(function(){
+        var d = new Date(), hour = d.getHours(), min = d.getMinutes(), sec= d.getSeconds();
+        if (sec===0){
+          secondHandDiv.classList.add("no-transition"); /* to avoid second hand moving anti-clockwise back to 90 degrees */
+        } else if (sec===1){
+          secondHandDiv.classList.remove("no-transition");
+        }
+        secondHandDiv.style.transform="rotate("+(90+sec*6)+"deg)";/* parenthesis around numbers to avoid their concatenation! */
+        minHandDiv.style.transform="rotate("+(90+min*6)+"deg)";
+        hourHandDiv.style.transform="rotate("+(90+hour*30)+"deg)";
+    },1000);
 
   </script>
 </body>
