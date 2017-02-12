@@ -25,18 +25,25 @@
     .then(stuff => stuff.json())
     .then(data => cities = data);
 
+  /*formatting population number */
+  function numberWithCommas(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+  }
+
   /* create filter function */
   function citiesFilter(){
     var searchText = this.value;
+    var regexpSearch = new RegExp(searchText, 'gi');
     var filtered = cities.filter(function(obj){
-      var regexpSearch = new RegExp(searchText, 'gi');
       return obj.city.match(regexpSearch) || obj.state.match(regexpSearch);
     });
-    console.log(filtered);
     
     var html = filtered.map(function(obj){
-      return '<li><span class="name">'+obj.city+', '+obj.state+'</span><span class="population">'+obj.population+'</span></li>';
+      var cityHighl = obj.city.replace(regexpSearch, "<span class='hl'>"+searchText+"</span>");
+      var stateHighl = obj.state.replace(regexpSearch, "<span class='hl'>"+searchText+"</span>");
+      return '<li><span class="name">'+cityHighl+', '+stateHighl+'</span><span class="population">'+numberWithCommas(obj.population)+'</span></li>';
     }).join('');
+    
     suggestions.innerHTML=html;
   } 
   
